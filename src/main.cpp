@@ -1,9 +1,10 @@
 #include <iostream>
 #include <string>
+#include <fstream>
 
 std::string extractValue(
     const std::string& line,
-    const std::string& target
+    const std::string& target = ""
 )
 {
     const size_t targetPos = line.find(target);
@@ -22,13 +23,26 @@ std::string extractValue(
     return line.substr(valueStart, valueEnd - valueStart);
 }
 
+std::string extractTimestamp(const std::string& line) {
+    return extractValue(line);
+}
+
 int main()
 {
-    const std::string line =
-        "2026-07-26T21:15:31 RPM=1350 TEMP=82.4";
+    std::ifstream logFile;
+    logFile.open("sample.log");
 
-    std::cout << extractValue(line, "RPM=") << '\n';
-    std::cout << extractValue(line, "TEMP=") << '\n';
+    if (!logFile.is_open()) {
+        std::cout << "Error: Could not read your log file.\n";
+        return 1;
+    }
+
+    std::string line;
+    while (std::getline(logFile, line)) {
+        std::cout << "Timestamp: " << extractTimestamp(line) << "\n";
+        std::cout << "RPM: " << extractValue(line, "RPM=") << '\n';
+        std::cout << "TEMP: " << extractValue(line, "TEMP=") << '\n';
+    }
 
     return 0;
 }

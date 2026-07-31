@@ -27,19 +27,23 @@ std::string extractTimestamp(const std::string& line) {
     return extractValue(line);
 }
 
-int main()
-{
-    std::ifstream logFile;
-    logFile.open("sample.log");
+int main(int argc, char* argv[]) {
+    if (argc < 2) {
+        std::cout << "Usage: SensorLogAnalyzer <log_file>\n";
+        return 1;
+    }   
+
+    std::ifstream logFile(argv[1]);
 
     if (!logFile.is_open()) {
-        std::cout << "Error: Could not read your log file.\n";
+        std::cout << "Error: Could not open your log file: " << argv[1] << '\n';
         return 1;
     }
 
     std::string line;
+
     while (std::getline(logFile, line)) {
-        std::cout << "Timestamp: " << extractTimestamp(line) << "\n";
+        std::cout << "Timestamp: " << extractTimestamp(line) << '\n';
         std::cout << "RPM: " << extractValue(line, "RPM=") << '\n';
         std::cout << "TEMP: " << extractValue(line, "TEMP=") << '\n';
     }

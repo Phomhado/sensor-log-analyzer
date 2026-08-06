@@ -36,7 +36,7 @@ int main(int argc, char* argv[]) {
     std::ifstream logFile(argv[1]);
 
     if (!logFile.is_open()) {
-        std::cout << "Error: Could not open your log file: " << argv[1] << '\n';
+        std::cerr << "Error: Could not open your log file: " << argv[1] << '\n';
         return 1;
     }
 

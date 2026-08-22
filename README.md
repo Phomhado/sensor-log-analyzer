@@ -109,6 +109,12 @@ SensorLogAnalyzer/
 
 ---
 
+## Use of AI (IMPORTANT)
+
+In this project I will use AI, mostly Codex from OpenAI, but the use of AI is purely as a pair programmer (navigator, I will be the pilot). AI will NOT code for me nor help me with the logic, that I will do myself. Codex will merely review my code in the PRs I will open
+
+I am not against the use of AI for development, quite the opposite, but this project is mainly for studying not only C++, but real Software Engineering and Programming in general. And AI can (and mostly will) think for myself. This is not what I want here
+
 ## Project Northbound
 
 This project is one milestone in **Project Northbound**, a long-term journey toward software engineering opportunities in Norway through consistent practice, real-world projects, and continuous learning.

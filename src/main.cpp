@@ -43,9 +43,9 @@ int main(int argc, char* argv[]) {
     std::string line;
 
     while (std::getline(logFile, line)) {
-        std::cout << "Timestamp: " << extractTimestamp(line);
-        std::cout << "RPM: " << extractValue(line, "RPM=");
-        std::cout << "TEMP: " << extractValue(line, "TEMP=");
+        std::cout << "Timestamp: " << extractTimestamp(line) << '\n';
+        std::cout << "RPM: " << extractValue(line, "RPM=") << '\n';
+        std::cout << "TEMP: " << extractValue(line, "TEMP=") << '\n';
     }
 
     return 0;

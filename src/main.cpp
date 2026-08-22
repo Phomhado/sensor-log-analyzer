@@ -27,6 +27,12 @@ std::string extractTimestamp(const std::string& line) {
     return extractValue(line);
 }
 
+struct SensorReading {
+    std::string timestamp;
+    int rpm;
+    double temperature;
+};
+
 int main(int argc, char* argv[]) {
     if (argc < 2) {
         std::cout << "Usage: SensorLogAnalyzer <log_file>\n";
@@ -43,9 +49,13 @@ int main(int argc, char* argv[]) {
     std::string line;
 
     while (std::getline(logFile, line)) {
-        std::cout << "Timestamp: " << extractTimestamp(line) << '\n';
-        std::cout << "RPM: " << extractValue(line, "RPM=") << '\n';
-        std::cout << "TEMP: " << extractValue(line, "TEMP=") << '\n';
+        SensorReading reading;
+        reading.timestamp = extractTimestamp(line);
+        reading.rpm = std::stoi(extractValue(line, "RPM="));
+        reading.temperature = std::stod(extractValue(line, "TEMP="));
+        std::cout << "Timestamp: " << reading.timestamp << '\n';
+        std::cout << "RPM: " << reading.rpm << '\n';
+        std::cout << "TEMP: " << reading.temperature << '\n';
     }
 
     return 0;

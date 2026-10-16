@@ -1,6 +1,8 @@
+#include <cstddef>
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <stdexcept>
 
 std::string extractValue(
     const std::string& line,
@@ -47,12 +49,40 @@ int main(int argc, char* argv[]) {
     }
 
     std::string line;
+    std::size_t lineNumber = 0;
 
     while (std::getline(logFile, line)) {
+        ++lineNumber;
+        if (!line.empty() && line.back() == '\r') {
+            line.pop_back();
+        }
+
         SensorReading reading;
         reading.timestamp = extractTimestamp(line);
-        reading.rpm = std::stoi(extractValue(line, "RPM="));
-        reading.temperature = std::stod(extractValue(line, "TEMP="));
+        const std::string rpmToken = extractValue(line, "RPM=");
+        const std::string temperatureToken = extractValue(line, "TEMP=");
+
+        try {
+            std::size_t consumed = 0;
+            reading.rpm = std::stoi(rpmToken, &consumed);
+            if (consumed != rpmToken.size()) {
+                throw std::invalid_argument("Trailing characters in RPM");
+            }
+
+            reading.temperature = std::stod(temperatureToken, &consumed);
+            if (consumed != temperatureToken.size()) {
+                throw std::invalid_argument("Trailing characters in TEMP");
+            }
+        } catch (const std::invalid_argument&) {
+            std::cerr << "Skipping line " << lineNumber
+                      << ": missing or invalid numeric value.\n";
+            continue;
+        } catch (const std::out_of_range&) {
+            std::cerr << "Skipping line " << lineNumber
+                      << ": numeric value is out of range.\n";
+            continue;
+        }
+
         std::cout << "Timestamp: " << reading.timestamp << '\n';
         std::cout << "RPM: " << reading.rpm << '\n';
         std::cout << "TEMP: " << reading.temperature << '\n';
